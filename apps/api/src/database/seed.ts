@@ -1,10 +1,17 @@
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User, UserRole } from '../users/entities/user.entity';
+import { Address } from '../users/entities/address.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Product, StockStatus } from '../products/entities/product.entity';
+import { ProductImage } from '../products/entities/product-image.entity';
 import { ProductVariant, VariantType } from '../products/entities/product-variant.entity';
 import { CustomizationOption, CustomizationType } from '../products/entities/customization-option.entity';
+import { Cart } from '../cart/entities/cart.entity';
+import { CartItem } from '../cart/entities/cart-item.entity';
+import { Order } from '../orders/entities/order.entity';
+import { OrderItem } from '../orders/entities/order-item.entity';
+import { Payment } from '../payments/entities/payment.entity';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 
@@ -15,7 +22,20 @@ const configService = new ConfigService();
 const AppDataSource = new DataSource({
   type: 'postgres',
   url: configService.get<string>('DATABASE_URL', 'postgresql://bakery_user:bakery_pass@localhost:5432/bakery_db'),
-  entities: [User, Category, Product, ProductVariant, CustomizationOption],
+  entities: [
+    User,
+    Address,
+    Category,
+    Product,
+    ProductImage,
+    ProductVariant,
+    CustomizationOption,
+    Cart,
+    CartItem,
+    Order,
+    OrderItem,
+    Payment,
+  ],
   synchronize: true,
   logging: false,
 });
@@ -78,6 +98,8 @@ async function seed() {
   const variantRepo = AppDataSource.getRepository(ProductVariant);
   const customizationRepo = AppDataSource.getRepository(CustomizationOption);
 
+  const imageRepo = AppDataSource.getRepository(ProductImage);
+
   const products = [
     {
       name: 'Classic Chocolate Cake',
@@ -90,6 +112,9 @@ async function seed() {
       isFeatured: true,
       isBestSeller: true,
       stockStatus: StockStatus.IN_STOCK,
+      images: [
+        { url: 'http://localhost:3000/uploads/classic-chocolate-cake.jpg', isPrimary: true },
+      ],
       variants: [
         { type: VariantType.WEIGHT, label: '1 lb', priceModifier: 0, sortOrder: 1 },
         { type: VariantType.WEIGHT, label: '2 lb', priceModifier: 600, sortOrder: 2 },
@@ -134,6 +159,9 @@ async function seed() {
       isFeatured: true,
       isBestSeller: false,
       stockStatus: StockStatus.IN_STOCK,
+      images: [
+        { url: 'http://localhost:3000/uploads/strawberry-cheesecake.jpg', isPrimary: true },
+      ],
       variants: [
         { type: VariantType.WEIGHT, label: '1 lb', priceModifier: 0, sortOrder: 1 },
         { type: VariantType.WEIGHT, label: '2 lb', priceModifier: 750, sortOrder: 2 },
@@ -214,7 +242,7 @@ async function seed() {
   for (const p of products) {
     const exists = await productRepo.findOne({ where: { slug: p.slug } });
     if (!exists) {
-      const { variants, customizations, categorySlug, ...productData } = p;
+      const { variants, customizations, images, categorySlug, ...productData } = p as any;
       const product = await productRepo.save(
         productRepo.create({
           ...productData,
@@ -222,17 +250,24 @@ async function seed() {
         }),
       );
 
+      // Save images
+      if (images?.length) {
+        await imageRepo.save(
+          images.map((img: any) => imageRepo.create({ ...img, productId: product.id })),
+        );
+      }
+
       // Save variants
       if (variants.length) {
         await variantRepo.save(
-          variants.map((v) => variantRepo.create({ ...v, productId: product.id })),
+          variants.map((v: any) => variantRepo.create({ ...v, productId: product.id })),
         );
       }
 
       // Save customizations
       if (customizations.length) {
         await customizationRepo.save(
-          customizations.map((c) =>
+          customizations.map((c: any) =>
             customizationRepo.create({ ...c, productId: product.id } as any),
           ),
         );

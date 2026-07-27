@@ -68,7 +68,7 @@ export class ProductsService {
   async findBySlug(slug: string) {
     const product = await this.productRepo.findOne({
       where: { slug, isActive: true },
-      relations: ['images', 'category', 'variants', 'customizationOptions'],
+      relations: { images: true, category: true, variants: true, customizationOptions: true },
     });
     if (!product) throw new NotFoundException('Product not found');
     return product;
@@ -77,7 +77,7 @@ export class ProductsService {
   async findById(id: string) {
     const product = await this.productRepo.findOne({
       where: { id },
-      relations: ['images', 'category', 'variants', 'customizationOptions'],
+      relations: { images: true, category: true, variants: true, customizationOptions: true },
     });
     if (!product) throw new NotFoundException('Product not found');
     return product;

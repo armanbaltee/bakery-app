@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, signal, HostListener, HostBinding, ViewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductsService, Product, Category } from '../../core/services/products.service';
@@ -9,36 +9,48 @@ import { ProductCardComponent } from '../../shared/product-card/product-card.com
   standalone: true,
   imports: [RouterLink, CommonModule, ProductCardComponent],
   template: `
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-bg"></div>
-      <div class="container hero-content">
-        <div class="hero-text fade-in-up">
-          <p class="hero-subtitle">Freshly Baked with Love</p>
-          <h1>Handcrafted Cakes<br>& Pastries for<br><em>Every Occasion</em></h1>
-          <p class="hero-desc">
-            From custom celebration cakes to daily pastries, everything is made from scratch
-            using the finest ingredients. Order online, delivered to your door.
-          </p>
-          <div class="hero-actions">
-            <a routerLink="/products" class="btn btn-primary btn-lg">Shop Now</a>
-            <a routerLink="/products" [queryParams]="{isCustomizable: 'true'}" class="btn btn-secondary btn-lg">Custom Cakes</a>
+    <!-- Hero Scroll Track Container -->
+    <div class="hero-scroll-track" #heroTrack>
+      <!-- Sticky Viewport Container -->
+      <div class="hero-sticky-container">
+        <!-- Canvas Background -->
+        <canvas class="hero-canvas" #heroCanvas></canvas>
+        <!-- Overlay Dark Gradient for Readability -->
+        <div class="hero-overlay-dark"></div>
+
+        <!-- Overlay Text Content -->
+        <div class="container hero-content-overlay" [style.opacity]="overlayOpacity()">
+          <div class="hero-text fade-in-up">
+            <p class="hero-subtitle">Freshly Baked with Love</p>
+            <h1>Handcrafted Cakes<br>& Pastries for<br><em>Every Occasion</em></h1>
+            <p class="hero-desc">
+              From custom celebration cakes to daily pastries, everything is made from scratch
+              using the finest ingredients. Order online, delivered to your door.
+            </p>
+            <div class="hero-actions">
+              <a routerLink="/products" class="btn btn-primary btn-lg">Shop Now</a>
+              <a routerLink="/products" [queryParams]="{isCustomizable: 'true'}" class="btn btn-secondary btn-lg">Custom Cakes</a>
+            </div>
+            <div class="hero-badges">
+              <span>🌾 Fresh Daily</span>
+              <span>🚚 Same Day Delivery</span>
+              <span>✨ 100% Handcrafted</span>
+            </div>
           </div>
-          <div class="hero-badges">
-            <span>🌾 Fresh Daily</span>
-            <span>🚚 Same Day Delivery</span>
-            <span>✨ 100% Handcrafted</span>
-          </div>
-        </div>
-        <div class="hero-image">
-          <div class="hero-img-circle">
-            <div class="hero-emoji">🎂</div>
-          </div>
-          <div class="floating-badge badge-1">⭐ 4.9 Rating</div>
-          <div class="floating-badge badge-2">🎉 500+ Orders</div>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Floating Background Items -->
+    <div class="parallax-container">
+      <img src="/assets/croissant.png" class="floating-item item-croissant-1" alt="Croissant" />
+      <img src="/assets/cookie.png" class="floating-item item-cookie-1" alt="Cookie" />
+      <img src="/assets/cupcake.png" class="floating-item item-cupcake-1" alt="Cupcake" />
+      <img src="/assets/mint-leaf.png" class="floating-item item-leaf-1" alt="Mint Leaf" />
+      <img src="/assets/mint-leaf.png" class="floating-item item-leaf-2" alt="Mint Leaf" />
+      <img src="/assets/croissant.png" class="floating-item item-croissant-2" alt="Croissant" />
+      <img src="/assets/cookie.png" class="floating-item item-cookie-2" alt="Cookie" />
+    </div>
 
     <!-- Categories -->
     <section class="section categories-section">
@@ -119,105 +131,204 @@ import { ProductCardComponent } from '../../shared/product-card/product-card.com
     </section>
   `,
   styles: [`
-    /* Hero */
-    .hero {
+    /* Host Container */
+    :host {
+      display: block;
       position: relative;
-      min-height: 600px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
+      overflow: visible;
+      --scroll-y: 0px;
     }
-    .hero-bg {
+
+    /* Hero Scroll Track and Sticky Viewport */
+    .hero-scroll-track {
+      height: 400vh;
+      position: relative;
+    }
+    .hero-sticky-container {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: -1;
+      will-change: transform;
+    }
+    .hero-overlay-dark {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-blush-light) 60%, var(--color-cream-dark) 100%);
+      background: radial-gradient(circle, rgba(29, 13, 4, 0.4) 0%, rgba(29, 13, 4, 0.6) 100%);
+      z-index: 0;
     }
-    .hero-content {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-3xl);
+    .hero-content-overlay {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      display: flex;
       align-items: center;
-      padding-top: var(--space-3xl);
-      padding-bottom: var(--space-3xl);
+      justify-content: center;
+      z-index: 2;
+      pointer-events: none;
+      transition: opacity 0.15s ease-out;
     }
-    .hero-subtitle {
-      color: var(--color-brown);
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: var(--space-md);
+    
+    /* Ensure only links/buttons have pointer events */
+    .hero-text {
+      pointer-events: auto;
+      max-width: 850px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
+
+    /* Override typography color for overlay readability */
     .hero-text h1 {
+      font-family: var(--font-heading);
+      color: var(--color-white) !important;
+      text-shadow: 0 4px 20px rgba(29, 13, 4, 0.55);
       margin-bottom: var(--space-lg);
-      color: var(--color-espresso);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.15;
     }
     .hero-text h1 em {
-      color: var(--color-brown);
+      color: var(--color-blush-light) !important;
       font-style: italic;
+      font-family: var(--font-heading);
+    }
+    .hero-subtitle {
+      font-family: var(--font-body);
+      color: var(--color-blush-light) !important;
+      letter-spacing: 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: var(--space-md);
+      text-shadow: 0 2px 10px rgba(29, 13, 4, 0.3);
     }
     .hero-desc {
-      color: var(--color-brown-light);
-      font-size: 1.05rem;
+      font-family: var(--font-body);
+      color: var(--color-cream) !important;
+      text-shadow: 0 2px 12px rgba(29, 13, 4, 0.5);
+      font-size: 1.15rem;
       line-height: 1.8;
-      margin-bottom: var(--space-xl);
-      max-width: 460px;
+      margin-bottom: var(--space-2xl);
+      max-width: 620px;
     }
     .hero-actions {
       display: flex;
       gap: var(--space-md);
       flex-wrap: wrap;
-      margin-bottom: var(--space-xl);
+      justify-content: center;
+      margin-bottom: var(--space-2xl);
+    }
+    .hero-text .btn-primary {
+      font-size: 1.05rem;
+      padding: 18px 44px;
+    }
+    .hero-text .btn-secondary {
+      font-size: 1.05rem;
+      padding: 18px 44px;
+      color: var(--color-white);
+      border-color: var(--color-white);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+    }
+    .hero-text .btn-secondary:hover {
+      background: var(--color-white);
+      color: var(--color-espresso);
+      box-shadow: var(--shadow-hover);
     }
     .hero-badges {
       display: flex;
       gap: var(--space-md);
       flex-wrap: wrap;
+      justify-content: center;
     }
     .hero-badges span {
-      font-size: 0.8rem;
-      color: var(--color-brown-light);
-      font-weight: 500;
-    }
-    .hero-image {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .hero-img-circle {
-      width: 360px;
-      height: 360px;
-      background: linear-gradient(135deg, var(--color-blush) 0%, var(--color-blush-light) 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-lg);
-      animation: float 4s ease-in-out infinite;
-    }
-    .hero-emoji { font-size: 9rem; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-16px); }
-    }
-    .floating-badge {
-      position: absolute;
-      background: #fff;
+      color: var(--color-cream) !important;
+      background: rgba(61, 26, 10, 0.55);
+      padding: 8px 18px;
       border-radius: var(--radius-full);
-      padding: 8px 16px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--color-espresso);
-      box-shadow: var(--shadow-md);
-      animation: floatBadge 3s ease-in-out infinite;
+      backdrop-filter: blur(6px);
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
-    .badge-1 { top: 20%; right: 0; animation-delay: 0.5s; }
-    .badge-2 { bottom: 20%; left: 0; animation-delay: 1s; }
-    @keyframes floatBadge {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+
+    /* Parallax Elements (Moved below the 400vh Hero Scroll Track) */
+    .parallax-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .floating-item {
+      position: absolute;
+      pointer-events: none;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.08));
+      transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0.85;
+      will-change: transform;
+    }
+
+    /* Floating Item Positions & Speeds */
+    .item-croissant-1 {
+      top: 420vh;
+      left: -40px;
+      width: 140px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.12)) rotate(calc(var(--scroll-y) * 0.08deg));
+    }
+    .item-cookie-1 {
+      top: 460vh;
+      right: -20px;
+      width: 110px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.2)) rotate(calc(var(--scroll-y) * -0.15deg));
+    }
+    .item-cupcake-1 {
+      top: 520vh;
+      left: 10px;
+      width: 130px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.15)) rotate(calc(var(--scroll-y) * 0.05deg));
+    }
+    .item-leaf-1 {
+      top: 430vh;
+      left: 18%;
+      width: 50px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.25)) rotate(calc(var(--scroll-y) * 0.3deg));
+      opacity: 0.7;
+    }
+    .item-leaf-2 {
+      top: 580vh;
+      right: 15%;
+      width: 45px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.3)) rotate(calc(var(--scroll-y) * -0.2deg));
+      opacity: 0.6;
+    }
+    .item-croissant-2 {
+      top: 610vh;
+      left: 20px;
+      width: 120px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.08)) rotate(calc(var(--scroll-y) * -0.06deg));
+    }
+    .item-cookie-2 {
+      top: 660vh;
+      right: 15px;
+      width: 100px;
+      transform: translateY(calc((var(--scroll-y) - 400vh) * -0.18)) rotate(calc(var(--scroll-y) * 0.1deg));
     }
 
     /* Categories */
@@ -275,17 +386,14 @@ import { ProductCardComponent } from '../../shared/product-card/product-card.com
       .categories-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 768px) {
-      .hero-content { grid-template-columns: 1fr; }
-      .hero-image { display: none; }
-      .hero { min-height: auto; }
-      .hero-content { padding: var(--space-2xl) var(--space-md); }
       .categories-grid { grid-template-columns: repeat(2, 1fr); }
       .cta-card { flex-direction: column; text-align: center; }
       .cta-decoration { display: none; }
+      .floating-item { display: none !important; }
     }
   `]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   private productsService = inject(ProductsService);
 
   categories = signal<Category[]>([]);
@@ -294,7 +402,30 @@ export class HomeComponent implements OnInit {
   loadingFeatured = signal(true);
   loadingBest = signal(true);
 
+  @ViewChild('heroCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('heroTrack', { static: false }) trackRef!: ElementRef<HTMLDivElement>;
+
+  images: HTMLImageElement[] = [];
+  totalFrames = 153;
+  overlayOpacity = signal(1);
+  currentFrameIndex = 0;
+
+  @HostBinding('style.--scroll-y') scrollY = '0px';
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.scrollY = `${window.scrollY}px`;
+    this.scheduleRender();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.resizeCanvas();
+  }
+
   ngOnInit() {
+    this.preloadImages();
+
     this.productsService.getCategories().subscribe((cats) => this.categories.set(cats));
 
     this.productsService.getProducts({ featured: 'true', limit: 4 }).subscribe((res) => {
@@ -308,6 +439,118 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    // Initial size setup and draw first frame
+    setTimeout(() => {
+      this.resizeCanvas();
+      this.scheduleRender();
+    }, 150);
+  }
+
+  preloadImages() {
+    for (let i = 1; i <= this.totalFrames; i++) {
+      const img = new Image();
+      const frameNum = String(i).padStart(3, '0');
+      img.src = `/uploads/Images/ezgif-frame-${frameNum}.jpg`;
+      img.onload = () => {
+        if (i === 1) {
+          this.scheduleRender();
+        }
+      };
+      this.images.push(img);
+    }
+  }
+
+  resizeCanvas() {
+    if (!this.canvasRef) return;
+    const canvas = this.canvasRef.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    this.renderFrame(this.currentFrameIndex);
+  }
+
+  private renderScheduled = false;
+
+  scheduleRender() {
+    if (this.renderScheduled) return;
+    this.renderScheduled = true;
+    requestAnimationFrame(() => {
+      this.renderScheduled = false;
+      this.updateAndRender();
+    });
+  }
+
+  updateAndRender() {
+    if (!this.trackRef || !this.canvasRef) return;
+    
+    const track = this.trackRef.nativeElement;
+    const rect = track.getBoundingClientRect();
+    
+    const totalScrollable = rect.height - window.innerHeight;
+    const relativeScroll = -rect.top;
+    
+    const progress = Math.max(0, Math.min(1, relativeScroll / totalScrollable));
+    
+    // Fade out overlay text in the first 30% of the scroll track
+    this.overlayOpacity.set(Math.max(0, 1 - progress / 0.3));
+    
+    // Map progress to image frames
+    const frameIndex = Math.max(0, Math.min(this.totalFrames - 1, Math.floor(progress * this.totalFrames)));
+    this.currentFrameIndex = frameIndex;
+    
+    this.renderFrame(frameIndex);
+  }
+
+  renderFrame(index: number) {
+    if (!this.canvasRef) return;
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Find the closest loaded image if the target one isn't ready
+    let img = this.images[index];
+    if (!img || !img.complete) {
+      for (let i = index; i >= 0; i--) {
+        if (this.images[i] && this.images[i].complete) {
+          img = this.images[i];
+          break;
+        }
+      }
+    }
+    if (!img || !img.complete) {
+      for (let i = index; i < this.totalFrames; i++) {
+        if (this.images[i] && this.images[i].complete) {
+          img = this.images[i];
+          break;
+        }
+      }
+    }
+
+    if (img && img.complete) {
+      this.drawImageProp(ctx, img);
+    }
+  }
+
+  drawImageProp(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
+    const canvas = ctx.canvas;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const imgWidth = img.width;
+    const imgHeight = img.height;
+
+    const r = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
+    const newWidth = imgWidth * r;
+    const newHeight = imgHeight * r;
+    const x = (canvasWidth - newWidth) / 2;
+    const y = (canvasHeight - newHeight) / 2;
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(img, x, y, newWidth, newHeight);
+  }
+
   getCategoryEmoji(slug: string): string {
     const map: Record<string, string> = {
       cakes: '🎂', cupcakes: '🧁', pastries: '🥐', cookies: '🍪', breads: '🍞',
@@ -315,3 +558,5 @@ export class HomeComponent implements OnInit {
     return map[slug] || '🍰';
   }
 }
+
+

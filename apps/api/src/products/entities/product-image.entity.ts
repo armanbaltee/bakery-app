@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  AfterLoad,
 } from 'typeorm';
 import { Product } from './product.entity';
 
@@ -32,4 +33,12 @@ export class ProductImage {
 
   @Column({ default: 0 })
   sortOrder: number;
+
+  @AfterLoad()
+  updateUrl() {
+    if (this.url && this.url.startsWith('/uploads/')) {
+      const apiHost = process.env.API_URL || 'http://localhost:3000';
+      this.url = `${apiHost}${this.url}`;
+    }
+  }
 }
