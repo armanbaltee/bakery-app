@@ -1,0 +1,1 @@
+import"./chunk-2VMXMS7J.js";var t=[{path:"",loadComponent:()=>import("./chunk-IQNRFCJ7.js").then(o=>o.CheckoutComponent)},{path:"processing",loadComponent:()=>import("./chunk-63XHZ5QL.js").then(o=>o.ProcessingComponent)}];export{t as CHECKOUT_ROUTES};

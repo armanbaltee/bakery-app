@@ -1,0 +1,3583 @@
+{
+ "Description": "Bakery App Full-Stack: Lambda (Hono) + DynamoDB + S3 + CloudFront + API Gateway",
+ "Resources": {
+  "BakeryTableD6334E84": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "PK",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "SK",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "GSI1PK",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "GSI1SK",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "GSI1",
+      "KeySchema": [
+       {
+        "AttributeName": "GSI1PK",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "GSI1SK",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "PK",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "SK",
+      "KeyType": "RANGE"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "TableName": "BakeryTable"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryTable/Resource"
+   }
+  },
+  "BakeryUploadsBucket03A262D1": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "bakery-uploads-028872333998-ap-northeast-1",
+    "CorsConfiguration": {
+     "CorsRules": [
+      {
+       "AllowedHeaders": [
+        "*"
+       ],
+       "AllowedMethods": [
+        "GET",
+        "PUT",
+        "POST"
+       ],
+       "AllowedOrigins": [
+        "*"
+       ],
+       "MaxAge": 3000
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": false,
+     "BlockPublicPolicy": false,
+     "IgnorePublicAcls": false,
+     "RestrictPublicBuckets": false
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUploadsBucket/Resource"
+   }
+  },
+  "BakeryUploadsBucketPolicy0E9B7FDE": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "BakeryUploadsBucket03A262D1"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "BakeryUploadsBucket03A262D1",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUploadsBucket/Policy/Resource"
+   }
+  },
+  "BakeryAdminBucketBC1763B4": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "bakery-admin-028872333998-ap-northeast-1",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     },
+     {
+      "Key": "aws-cdk:cr-owned:700c68d9",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAdminBucket/Resource"
+   }
+  },
+  "BakeryAdminBucketPolicy954D5F11": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "BakeryAdminBucketBC1763B4"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryAdminBucketBC1763B4",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryAdminBucketBC1763B4",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Condition": {
+        "StringEquals": {
+         "AWS:SourceArn": {
+          "Fn::Join": [
+           "",
+           [
+            "arn:",
+            {
+             "Ref": "AWS::Partition"
+            },
+            ":cloudfront::",
+            {
+             "Ref": "AWS::AccountId"
+            },
+            ":distribution/",
+            {
+             "Ref": "BakeryAdminDistribution9A8D8ABC"
+            }
+           ]
+          ]
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "BakeryAdminBucketBC1763B4",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAdminBucket/Policy/Resource"
+   }
+  },
+  "BakeryAdminBucketAutoDeleteObjectsCustomResource0268F12E": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "BakeryAdminBucketBC1763B4"
+    }
+   },
+   "DependsOn": [
+    "BakeryAdminBucketPolicy954D5F11"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAdminBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs24.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "BakeryAdminBucketBC1763B4"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryUserBucket7B17576F": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "bakery-user-028872333998-ap-northeast-1",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     },
+     {
+      "Key": "aws-cdk:cr-owned:dd4f8b8c",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUserBucket/Resource"
+   }
+  },
+  "BakeryUserBucketPolicy0872FF80": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "BakeryUserBucket7B17576F"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryUserBucket7B17576F",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryUserBucket7B17576F",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Condition": {
+        "StringEquals": {
+         "AWS:SourceArn": {
+          "Fn::Join": [
+           "",
+           [
+            "arn:",
+            {
+             "Ref": "AWS::Partition"
+            },
+            ":cloudfront::",
+            {
+             "Ref": "AWS::AccountId"
+            },
+            ":distribution/",
+            {
+             "Ref": "BakeryUserDistributionDCEEA4DF"
+            }
+           ]
+          ]
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "BakeryUserBucket7B17576F",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUserBucket/Policy/Resource"
+   }
+  },
+  "BakeryUserBucketAutoDeleteObjectsCustomResource283C0FD3": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "BakeryUserBucket7B17576F"
+    }
+   },
+   "DependsOn": [
+    "BakeryUserBucketPolicy0872FF80"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUserBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "BakeryHttpApi2F71A55A": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowHeaders": [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With"
+     ],
+     "AllowMethods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+     ],
+     "AllowOrigins": [
+      "*"
+     ],
+     "MaxAge": 86400
+    },
+    "Description": "Bakery Serverless HTTP API Gateway",
+    "Name": "bakery-api",
+    "ProtocolType": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/Resource"
+   }
+  },
+  "BakeryHttpApiDefaultStageA9DA831F": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/DefaultStage/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiauthproxyauthIntegrationD88B7170": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryAuthLambdaC0D7D5F1",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/authIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiauthproxyauthIntegrationPermission4A8FF8AE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryAuthLambdaC0D7D5F1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/auth/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/authIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiauthproxy89416CAC": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/auth/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiauthproxyauthIntegrationD88B7170"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiauthauthIntegrationPermissionF93C4846": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryAuthLambdaC0D7D5F1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/auth"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--auth/authIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiauth0DD04585": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/auth",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiauthproxyauthIntegrationD88B7170"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--auth/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationC31FC4FB": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryCategoriesLambda1BBA42AF",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/categoriesIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationPermission227F9EAA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryCategoriesLambda1BBA42AF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/categories/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/categoriesIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapicategoriesproxyD7DB8EC0": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/categories/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationC31FC4FB"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicategoriescategoriesIntegrationPermissionA87996DE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryCategoriesLambda1BBA42AF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/categories"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--categories/categoriesIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapicategories8908C6F4": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/categories",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationC31FC4FB"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--categories/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiproductsproxyproductsIntegrationEB411EFB": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryProductsLambda6894BCF5",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/productsIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiproductsproxyproductsIntegrationPermission1ACCB792": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryProductsLambda6894BCF5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/products/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/productsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiproductsproxy19BF26FE": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/products/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiproductsproxyproductsIntegrationEB411EFB"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiproductsproductsIntegrationPermissionB070DBA4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryProductsLambda6894BCF5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/products"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--products/productsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiproducts8AA86B56": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/products",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiproductsproxyproductsIntegrationEB411EFB"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--products/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicartproxycartIntegration8B554BB4": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryCartLambdaE82F1F6A",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/cartIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicartproxycartIntegrationPermission1DDF9ECC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryCartLambdaE82F1F6A",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/cart/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/cartIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapicartproxyFDF01876": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/cart/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapicartproxycartIntegration8B554BB4"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapicartcartIntegrationPermissionCB6C09A0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryCartLambdaE82F1F6A",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/cart"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--cart/cartIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapicart96FA3891": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/cart",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapicartproxycartIntegration8B554BB4"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--cart/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiordersproxyordersIntegrationFCF0B28F": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryOrdersLambda186C01C0",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/ordersIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiordersproxyordersIntegrationPermission906EE3B2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryOrdersLambda186C01C0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/orders/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/ordersIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiordersproxy11F83780": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/orders/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiordersproxyordersIntegrationFCF0B28F"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiordersordersIntegrationPermission577752B8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryOrdersLambda186C01C0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/orders"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--orders/ordersIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiordersD6DF7EE9": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/orders",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiordersproxyordersIntegrationFCF0B28F"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--orders/Resource"
+   }
+  },
+  "BakeryHttpApiANYapipaymentsproxypaymentsIntegration62D6038E": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryPaymentsLambda1B967A5E",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/paymentsIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapipaymentsproxypaymentsIntegrationPermissionB57AE745": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryPaymentsLambda1B967A5E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/payments/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/paymentsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapipaymentsproxy322DB6D3": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/payments/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapipaymentsproxypaymentsIntegration62D6038E"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapipaymentspaymentsIntegrationPermission1668FF51": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryPaymentsLambda1B967A5E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/payments"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--payments/paymentsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapipayments32B0F1B8": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/payments",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapipaymentsproxypaymentsIntegration62D6038E"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--payments/Resource"
+   }
+  },
+  "BakeryHttpApiANYapireportsproxyreportsIntegrationCEE80EE7": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryReportsLambdaB78CAACA",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/reportsIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapireportsproxyreportsIntegrationPermission774A3A2E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryReportsLambdaB78CAACA",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/reports/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/reportsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapireportsproxy11015996": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/reports/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapireportsproxyreportsIntegrationCEE80EE7"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapireportsreportsIntegrationPermissionD7463D6C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryReportsLambdaB78CAACA",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/reports"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--reports/reportsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapireports1F42CBE8": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/reports",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapireportsproxyreportsIntegrationCEE80EE7"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--reports/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationD7534FBF": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryUploadsLambda76C8BA6F",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/uploadsIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationPermission30EF86AC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryUploadsLambda76C8BA6F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/uploads/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/uploadsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiuploadsproxy87B760F9": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/uploads/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationD7534FBF"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiuploadsuploadsIntegrationPermission5BC1DBF9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryUploadsLambda76C8BA6F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/uploads"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--uploads/uploadsIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiuploadsB9FE7A9D": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/uploads",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationD7534FBF"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--uploads/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiusersproxyusersIntegration740481C9": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "BakeryUsersLambda8CF50AB1",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/usersIntegration/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiusersproxyusersIntegrationPermission3C5382A4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryUsersLambda8CF50AB1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/users/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/usersIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiusersproxy307E2684": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/users/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiusersproxyusersIntegration740481C9"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/Resource"
+   }
+  },
+  "BakeryHttpApiANYapiusersusersIntegrationPermission047B83FB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "BakeryUsersLambda8CF50AB1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:028872333998:",
+       {
+        "Ref": "BakeryHttpApi2F71A55A"
+       },
+       "/*/*/api/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--users/usersIntegration-Permission"
+   }
+  },
+  "BakeryHttpApiANYapiusers9C94F9DD": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "BakeryHttpApi2F71A55A"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /api/users",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "BakeryHttpApiANYapiusersproxyusersIntegration740481C9"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryHttpApi/ANY--api--users/Resource"
+   }
+  },
+  "BakeryAuthLambdaServiceRole1CFCBAF7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAuthLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryAuthLambdaServiceRoleDefaultPolicy0CBD6107": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryAuthLambdaServiceRoleDefaultPolicy0CBD6107",
+    "Roles": [
+     {
+      "Ref": "BakeryAuthLambdaServiceRole1CFCBAF7"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAuthLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryAuthLambdaC0D7D5F1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "03888d50d39b02a5b2de0527097611b6c6ed537baa5069362c36fcd828d9ad2a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-auth-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryAuthLambdaServiceRole1CFCBAF7",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryAuthLambdaServiceRoleDefaultPolicy0CBD6107",
+    "BakeryAuthLambdaServiceRole1CFCBAF7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAuthLambda/Resource",
+    "aws:asset:path": "asset.03888d50d39b02a5b2de0527097611b6c6ed537baa5069362c36fcd828d9ad2a",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryCategoriesLambdaServiceRoleEDD2C008": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCategoriesLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryCategoriesLambdaServiceRoleDefaultPolicyEEDFD865": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryCategoriesLambdaServiceRoleDefaultPolicyEEDFD865",
+    "Roles": [
+     {
+      "Ref": "BakeryCategoriesLambdaServiceRoleEDD2C008"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCategoriesLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryCategoriesLambda1BBA42AF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "9aadc42b749f31419c5aad1ac50ab8d7b92500f380397a3e3af7d72df7c74bd3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-categories-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryCategoriesLambdaServiceRoleEDD2C008",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryCategoriesLambdaServiceRoleDefaultPolicyEEDFD865",
+    "BakeryCategoriesLambdaServiceRoleEDD2C008"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCategoriesLambda/Resource",
+    "aws:asset:path": "asset.9aadc42b749f31419c5aad1ac50ab8d7b92500f380397a3e3af7d72df7c74bd3",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryProductsLambdaServiceRoleF8C2A356": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryProductsLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryProductsLambdaServiceRoleDefaultPolicy3186B1F7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryUploadsBucket03A262D1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryUploadsBucket03A262D1",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryProductsLambdaServiceRoleDefaultPolicy3186B1F7",
+    "Roles": [
+     {
+      "Ref": "BakeryProductsLambdaServiceRoleF8C2A356"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryProductsLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryProductsLambda6894BCF5": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "f9f0d90bf0b2bbe12850891bcd42748edcde48b584b36ed067044de24914331a.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-products-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryProductsLambdaServiceRoleF8C2A356",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryProductsLambdaServiceRoleDefaultPolicy3186B1F7",
+    "BakeryProductsLambdaServiceRoleF8C2A356"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryProductsLambda/Resource",
+    "aws:asset:path": "asset.f9f0d90bf0b2bbe12850891bcd42748edcde48b584b36ed067044de24914331a",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryCartLambdaServiceRole039C8A14": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCartLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryCartLambdaServiceRoleDefaultPolicyCD842A56": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryCartLambdaServiceRoleDefaultPolicyCD842A56",
+    "Roles": [
+     {
+      "Ref": "BakeryCartLambdaServiceRole039C8A14"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCartLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryCartLambdaE82F1F6A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "b9b9b8799957238da679f56429cb39096a0d5f8b4714506ad1ebfac98ef58fc8.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-cart-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryCartLambdaServiceRole039C8A14",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryCartLambdaServiceRoleDefaultPolicyCD842A56",
+    "BakeryCartLambdaServiceRole039C8A14"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryCartLambda/Resource",
+    "aws:asset:path": "asset.b9b9b8799957238da679f56429cb39096a0d5f8b4714506ad1ebfac98ef58fc8",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryOrdersLambdaServiceRoleC24006C6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryOrdersLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryOrdersLambdaServiceRoleDefaultPolicy89177944": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryOrdersLambdaServiceRoleDefaultPolicy89177944",
+    "Roles": [
+     {
+      "Ref": "BakeryOrdersLambdaServiceRoleC24006C6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryOrdersLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryOrdersLambda186C01C0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "74170d919e63259db92e3da83f75e279d648c6c97ac7ab2a23ae11b1d6d49def.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-orders-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryOrdersLambdaServiceRoleC24006C6",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryOrdersLambdaServiceRoleDefaultPolicy89177944",
+    "BakeryOrdersLambdaServiceRoleC24006C6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryOrdersLambda/Resource",
+    "aws:asset:path": "asset.74170d919e63259db92e3da83f75e279d648c6c97ac7ab2a23ae11b1d6d49def",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryPaymentsLambdaServiceRole9099340E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryPaymentsLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryPaymentsLambdaServiceRoleDefaultPolicyCF63F255": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryPaymentsLambdaServiceRoleDefaultPolicyCF63F255",
+    "Roles": [
+     {
+      "Ref": "BakeryPaymentsLambdaServiceRole9099340E"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryPaymentsLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryPaymentsLambda1B967A5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "91600b0de0f7a5a5e1f6e81303cfe48ed2e434496e5410617267159f081bd7c7.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-payments-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryPaymentsLambdaServiceRole9099340E",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryPaymentsLambdaServiceRoleDefaultPolicyCF63F255",
+    "BakeryPaymentsLambdaServiceRole9099340E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryPaymentsLambda/Resource",
+    "aws:asset:path": "asset.91600b0de0f7a5a5e1f6e81303cfe48ed2e434496e5410617267159f081bd7c7",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryReportsLambdaServiceRole3619A511": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryReportsLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryReportsLambdaServiceRoleDefaultPolicy229D4D90": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryReportsLambdaServiceRoleDefaultPolicy229D4D90",
+    "Roles": [
+     {
+      "Ref": "BakeryReportsLambdaServiceRole3619A511"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryReportsLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryReportsLambdaB78CAACA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "9bae1fbe1f4fa6242d2048a301ad5d87a517bc603fdd1f21a4acef954f11a169.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-reports-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryReportsLambdaServiceRole3619A511",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryReportsLambdaServiceRoleDefaultPolicy229D4D90",
+    "BakeryReportsLambdaServiceRole3619A511"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryReportsLambda/Resource",
+    "aws:asset:path": "asset.9bae1fbe1f4fa6242d2048a301ad5d87a517bc603fdd1f21a4acef954f11a169",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryUploadsLambdaServiceRole53BE42B3": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUploadsLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryUploadsLambdaServiceRoleDefaultPolicy12203034": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryUploadsBucket03A262D1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryUploadsBucket03A262D1",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryUploadsLambdaServiceRoleDefaultPolicy12203034",
+    "Roles": [
+     {
+      "Ref": "BakeryUploadsLambdaServiceRole53BE42B3"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUploadsLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryUploadsLambda76C8BA6F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "35ca3b6f71fa80909b89dcd458b6c8a43e4887af0e5f4eeda340b3326ce2cac3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-uploads-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryUploadsLambdaServiceRole53BE42B3",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryUploadsLambdaServiceRoleDefaultPolicy12203034",
+    "BakeryUploadsLambdaServiceRole53BE42B3"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUploadsLambda/Resource",
+    "aws:asset:path": "asset.35ca3b6f71fa80909b89dcd458b6c8a43e4887af0e5f4eeda340b3326ce2cac3",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BakeryUsersLambdaServiceRoleC3491AF9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUsersLambda/ServiceRole/Resource"
+   }
+  },
+  "BakeryUsersLambdaServiceRoleDefaultPolicyCDC73BA1": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryTableD6334E84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryTableD6334E84",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BakeryUsersLambdaServiceRoleDefaultPolicyCDC73BA1",
+    "Roles": [
+     {
+      "Ref": "BakeryUsersLambdaServiceRoleC3491AF9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUsersLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "BakeryUsersLambda8CF50AB1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "23dee7142f25e263e1a0720175cd07e9483a655aa51db623f3ecc3017035a0b0.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "NODE_ENV": "production",
+      "TABLE_NAME": {
+       "Ref": "BakeryTableD6334E84"
+      },
+      "UPLOADS_BUCKET_NAME": {
+       "Ref": "BakeryUploadsBucket03A262D1"
+      },
+      "AWS_REGION_CONFIG": "ap-northeast-1"
+     }
+    },
+    "FunctionName": "bakery-users-lambda",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "BakeryUsersLambdaServiceRoleC3491AF9",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "BakeryUsersLambdaServiceRoleDefaultPolicyCDC73BA1",
+    "BakeryUsersLambdaServiceRoleC3491AF9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUsersLambda/Resource",
+    "aws:asset:path": "asset.23dee7142f25e263e1a0720175cd07e9483a655aa51db623f3ecc3017035a0b0",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AdminOACB9A16AC7": {
+   "Type": "AWS::CloudFront::OriginAccessControl",
+   "Properties": {
+    "OriginAccessControlConfig": {
+     "Description": "Admin Portal OAC",
+     "Name": "BakeryStackAdminOAC71854018",
+     "OriginAccessControlOriginType": "s3",
+     "SigningBehavior": "always",
+     "SigningProtocol": "sigv4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/AdminOAC/Resource"
+   }
+  },
+  "BakeryAdminDistribution9A8D8ABC": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "CacheBehaviors": [
+      {
+       "AllowedMethods": [
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PUT",
+        "PATCH",
+        "POST",
+        "DELETE"
+       ],
+       "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+       "Compress": true,
+       "OriginRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
+       "PathPattern": "/api/*",
+       "TargetOriginId": "BakeryStackBakeryAdminDistributionOrigin2A674A5C4",
+       "ViewerProtocolPolicy": "redirect-to-https"
+      }
+     ],
+     "Comment": "Bakery Admin Portal - CloudFront CDN",
+     "CustomErrorResponses": [
+      {
+       "ErrorCode": 403,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      },
+      {
+       "ErrorCode": 404,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      }
+     ],
+     "DefaultCacheBehavior": {
+      "AllowedMethods": [
+       "GET",
+       "HEAD",
+       "OPTIONS"
+      ],
+      "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+      "Compress": true,
+      "TargetOriginId": "BakeryStackBakeryAdminDistributionOrigin102BA1F74",
+      "ViewerProtocolPolicy": "redirect-to-https"
+     },
+     "DefaultRootObject": "index.html",
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "DomainName": {
+        "Fn::GetAtt": [
+         "BakeryAdminBucketBC1763B4",
+         "RegionalDomainName"
+        ]
+       },
+       "Id": "BakeryStackBakeryAdminDistributionOrigin102BA1F74",
+       "OriginAccessControlId": {
+        "Fn::GetAtt": [
+         "AdminOACB9A16AC7",
+         "Id"
+        ]
+       },
+       "S3OriginConfig": {
+        "OriginAccessIdentity": ""
+       }
+      },
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "https-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "BakeryHttpApi2F71A55A"
+          },
+          ".execute-api.ap-northeast-1.amazonaws.com"
+         ]
+        ]
+       },
+       "Id": "BakeryStackBakeryAdminDistributionOrigin2A674A5C4"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryAdminDistribution/Resource"
+   }
+  },
+  "UserOACDBAAAC58": {
+   "Type": "AWS::CloudFront::OriginAccessControl",
+   "Properties": {
+    "OriginAccessControlConfig": {
+     "Description": "User Storefront OAC",
+     "Name": "BakeryStackUserOAC88B4447C",
+     "OriginAccessControlOriginType": "s3",
+     "SigningBehavior": "always",
+     "SigningProtocol": "sigv4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/UserOAC/Resource"
+   }
+  },
+  "BakeryUserDistributionDCEEA4DF": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "CacheBehaviors": [
+      {
+       "AllowedMethods": [
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PUT",
+        "PATCH",
+        "POST",
+        "DELETE"
+       ],
+       "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+       "Compress": true,
+       "OriginRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
+       "PathPattern": "/api/*",
+       "TargetOriginId": "BakeryStackBakeryUserDistributionOrigin2D67FF3E4",
+       "ViewerProtocolPolicy": "redirect-to-https"
+      }
+     ],
+     "Comment": "Bakery User Storefront - CloudFront CDN",
+     "CustomErrorResponses": [
+      {
+       "ErrorCode": 403,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      },
+      {
+       "ErrorCode": 404,
+       "ResponseCode": 200,
+       "ResponsePagePath": "/index.html"
+      }
+     ],
+     "DefaultCacheBehavior": {
+      "AllowedMethods": [
+       "GET",
+       "HEAD",
+       "OPTIONS"
+      ],
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "BakeryStackBakeryUserDistributionOrigin150D69557",
+      "ViewerProtocolPolicy": "redirect-to-https"
+     },
+     "DefaultRootObject": "index.html",
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "DomainName": {
+        "Fn::GetAtt": [
+         "BakeryUserBucket7B17576F",
+         "RegionalDomainName"
+        ]
+       },
+       "Id": "BakeryStackBakeryUserDistributionOrigin150D69557",
+       "OriginAccessControlId": {
+        "Fn::GetAtt": [
+         "UserOACDBAAAC58",
+         "Id"
+        ]
+       },
+       "S3OriginConfig": {
+        "OriginAccessIdentity": ""
+       }
+      },
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "https-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "BakeryHttpApi2F71A55A"
+          },
+          ".execute-api.ap-northeast-1.amazonaws.com"
+         ]
+        ]
+       },
+       "Id": "BakeryStackBakeryUserDistributionOrigin2D67FF3E4"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/BakeryUserDistribution/Resource"
+   }
+  },
+  "DeployAdminSiteAwsCliLayerC1B929B0": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip"
+    },
+    "Description": "/opt/awscli/aws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/DeployAdminSite/AwsCliLayer/Resource",
+    "aws:asset:path": "asset.98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "DeployAdminSiteCustomResource8DC4F866": {
+   "Type": "Custom::CDKBucketDeployment",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+      "Arn"
+     ]
+    },
+    "SourceBucketNames": [
+     "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "cdk-hnb659fds-assets-028872333998-ap-northeast-1"
+    ],
+    "SourceObjectKeys": [
+     "28edb14dad8f8d27d83ea4160febdd51e2faa4ae173cfaf2c8c061749f9afeb9.zip",
+     "a53b318f6e61d4bbd4f8852c51342c7cd65a6b2e6f8a481103ca92a40a494a70.zip"
+    ],
+    "SourceMarkers": [
+     {},
+     {
+      "<<marker:0xbaba:0>>": {
+       "Ref": "BakeryHttpApi2F71A55A"
+      },
+      "<<marker:0xbaba:1>>": {
+       "Ref": "AWS::URLSuffix"
+      }
+     }
+    ],
+    "SourceMarkersConfig": [
+     {},
+     {}
+    ],
+    "DestinationBucketName": {
+     "Ref": "BakeryAdminBucketBC1763B4"
+    },
+    "WaitForDistributionInvalidation": true,
+    "Prune": true,
+    "DistributionId": {
+     "Ref": "BakeryAdminDistribution9A8D8ABC"
+    },
+    "DistributionPaths": [
+     "/*"
+    ],
+    "OutputObjectKeys": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/DeployAdminSite/CustomResource/Default"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:s3:::cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+        "arn:aws:s3:::cdk-hnb659fds-assets-028872333998-ap-northeast-1/*"
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "BakeryAdminBucketBC1763B4",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "BakeryUserBucket7B17576F",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryAdminBucketBC1763B4",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "BakeryUserBucket7B17576F",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "cloudfront:CreateInvalidation",
+        "cloudfront:GetInvalidation"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "Roles": [
+     {
+      "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "35328da138f26fbd9160297abc9a2522d93dbf75878cd5114a9c050419fc1ce0.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+     }
+    },
+    "Handler": "index.handler",
+    "Layers": [
+     {
+      "Ref": "DeployAdminSiteAwsCliLayerC1B929B0"
+     }
+    ],
+    "MemorySize": 1024,
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.13",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+    "aws:asset:path": "asset.35328da138f26fbd9160297abc9a2522d93dbf75878cd5114a9c050419fc1ce0",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DeployUserSiteAwsCliLayerDAAB7AE0": {
+   "Type": "AWS::Lambda::LayerVersion",
+   "Properties": {
+    "Content": {
+     "S3Bucket": "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "S3Key": "98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip"
+    },
+    "Description": "/opt/awscli/aws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/DeployUserSite/AwsCliLayer/Resource",
+    "aws:asset:path": "asset.98f62bef9320f8c0a0a7be21d7c746f069131f196f51ffe3008a6bb730b368ec.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Content"
+   }
+  },
+  "DeployUserSiteCustomResourceDDAF8560": {
+   "Type": "Custom::CDKBucketDeployment",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
+      "Arn"
+     ]
+    },
+    "SourceBucketNames": [
+     "cdk-hnb659fds-assets-028872333998-ap-northeast-1",
+     "cdk-hnb659fds-assets-028872333998-ap-northeast-1"
+    ],
+    "SourceObjectKeys": [
+     "c72cab21c4c4ed588397b887c278f2ce6a79d432b6eff6b70f8959d56a307367.zip",
+     "a53b318f6e61d4bbd4f8852c51342c7cd65a6b2e6f8a481103ca92a40a494a70.zip"
+    ],
+    "SourceMarkers": [
+     {},
+     {
+      "<<marker:0xbaba:0>>": {
+       "Ref": "BakeryHttpApi2F71A55A"
+      },
+      "<<marker:0xbaba:1>>": {
+       "Ref": "AWS::URLSuffix"
+      }
+     }
+    ],
+    "SourceMarkersConfig": [
+     {},
+     {}
+    ],
+    "DestinationBucketName": {
+     "Ref": "BakeryUserBucket7B17576F"
+    },
+    "WaitForDistributionInvalidation": true,
+    "Prune": true,
+    "DistributionId": {
+     "Ref": "BakeryUserDistributionDCEEA4DF"
+    },
+    "DistributionPaths": [
+     "/*"
+    ],
+    "OutputObjectKeys": true
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/DeployUserSite/CustomResource/Default"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/3VRy07DMBD8Fu6uqdID5xKEQEKiahHXauNso6WOHXnXjSIr/46c9IEQnObhsb0eF7p4WOnlHfS8MPVxYanSaSdgjgp63qd6cND6utLpAyqLqjy4iYyKVzo9RnNEyeaZzbDxlsxws896Fo/AOCroqAHBHoZTodOLSLfuKO/IkOVOoJmum0m2tj7KzF6dYBNAyLsc+SWn3KgstFUNOpUHt8HQEnNef47OXII/+RsMGD4xTKEducai+GtiVAStTls/VzDh7ZUzy5XsEzCjsF5nUDV21g8tOtHz45+uxqiM9bE+BO9Ep93qPVBDbm0MMpfeSfA2H/2X/UQsgap4Gf2nHke1RfYxGFRlZPHtTR7cP0ub4E9UY8hfo6bJc+nkmnOHe5vL2UPPxpJe91xamvqaJozSRRmV8zXqL74/FYUulnp598VEixCdUIt6O+M3/kf6bG8CAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "BakeryStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ApiGatewayUrl": {
+   "Description": "HTTP API Gateway Base URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "BakeryHttpApi2F71A55A"
+      },
+      ".execute-api.ap-northeast-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "BakeryApiUrl"
+   }
+  },
+  "AdminCloudFrontUrl": {
+   "Description": "Admin Portal CloudFront URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "BakeryAdminDistribution9A8D8ABC",
+        "DomainName"
+       ]
+      }
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "BakeryAdminUrl"
+   }
+  },
+  "UserCloudFrontUrl": {
+   "Description": "User Storefront CloudFront URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "BakeryUserDistributionDCEEA4DF",
+        "DomainName"
+       ]
+      }
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "BakeryUserUrl"
+   }
+  },
+  "DynamoTableName": {
+   "Description": "DynamoDB Table Name",
+   "Value": {
+    "Ref": "BakeryTableD6334E84"
+   },
+   "Export": {
+    "Name": "BakeryDynamoTable"
+   }
+  },
+  "UploadsBucketName": {
+   "Description": "S3 Product Uploads Bucket Name",
+   "Value": {
+    "Ref": "BakeryUploadsBucket03A262D1"
+   },
+   "Export": {
+    "Name": "BakeryUploadsBucket"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

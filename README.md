@@ -1,109 +1,92 @@
-# New Nx Repository
+# 🧁 Bakery App - Serverless Monorepo
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Welcome to the **Bakery App** full-stack serverless monorepo! This workspace is divided into three decoupled projects with global AWS CDK infrastructure:
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+1. **`admin`** (`apps/admin`): Admin Portal frontend for managing orders, products, categories, users, and reports.
+2. **`user`** (`apps/user`): Client/Storefront frontend for customers to browse cakes, customize products, add to cart, and checkout with COD, JazzCash, or EasyPaisa.
+3. **`backend`** (`apps/backend`): Serverless REST API powered by **Node.js TypeScript**, **Hono**, and **AWS Lambda**.
+4. **`infra`** (`infra/`): Global **AWS CDK** infrastructure stack that deploys all 3 projects together to AWS.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/docs/technologies/typescript/introduction?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/get-started). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
+## 🏗️ Architecture & Projects
 
-## Generate a library
+| Project | Type | Tech Stack | Local Port / Cloud Resource | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **`admin`** | Frontend | Angular 21 (Signals & Standalone) | `4201` / S3 + CloudFront | Admin dashboard, order fulfillment, product management, metrics |
+| **`user`** | Frontend | Angular 21 (Signals & Standalone) | `4200` / S3 + CloudFront | Customer storefront, cake customizer, cart, checkout, order tracking |
+| **`backend`** | Backend | Node.js TypeScript + Hono | `3000` / AWS Lambda + HTTP API Gateway | REST API (`/api`), JWT Auth, Payments, S3 Presigned URLs |
+| **`database`** | Database | Amazon DynamoDB | Single-Table Design (`BakeryTable`) | Pay-as-you-go serverless NoSQL storage with GSI1 |
+| **`infra`** | DevOps | AWS CDK v2 (TypeScript) | CloudFormation | One-command global deploy for all 3 projects |
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+---
+
+## ⚡ Pay-As-You-Go Architecture
+
+- **Amazon DynamoDB**: `BillingMode.PAY_PER_REQUEST` (Zero fixed cost when idle).
+- **AWS Lambda**: Sub-second execution on demand, handles `/api/*` traffic via HTTP API Gateway.
+- **Amazon S3 & CloudFront**: Edge-cached static hosting for both Admin & User frontends, plus secure uploads bucket for product images.
+
+---
+
+## 🚀 Quick Start Commands
+
+All commands can be run directly from the root:
+
+### Running Applications in Development Mode
+
+```bash
+# 1. Run Serverless Backend API (http://localhost:3000/api)
+npm run dev:backend
+
+# 2. Run Admin Portal (http://localhost:4201)
+npm run dev:admin
+
+# 3. Run User Storefront (http://localhost:4200)
+npm run dev:user
+
+# Run all 3 projects concurrently:
+npm run dev:all
 ```
 
-## Run tasks
+### Seeding DynamoDB with Initial Data
 
-To build the library use:
+```bash
+npm run seed
+```
+Seeds initial admin account (`admin@bakery.com` / `admin123`), sample categories (Cakes, Pastries, Cupcakes, Breads, Cookies), and popular products with pricing, stock, and variations.
 
-```sh
-npx nx run pkg1:build
+---
+
+## ☁️ Global AWS CDK Deployment (Deploy All 3 Projects Together)
+
+Prerequisites: Have your AWS credentials configured (`aws configure` or environment variables `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`).
+
+### 1. Build All 3 Projects
+```bash
+npm run build:all
 ```
 
-To run any task with Nx use:
-
-```sh
-npx nx run <project-name>:<target>
+### 2. Synthesize CloudFormation Template
+```bash
+npm run cdk:synth
 ```
 
-These targets are either [inferred automatically](https://nx.dev/docs/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/docs/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
+### 3. Bootstrap CDK (First Time Only)
+```bash
+npm run cdk:bootstrap
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/docs/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
+### 4. Deploy All 3 in One Command
+```bash
+npm run deploy:all
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/docs/features/ci-features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/docs/features/ci-features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/docs/features/ci-features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/docs/features/ci-features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Set up CI (non-Github Actions CI)
-
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/docs/features/ci-features?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/docs/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## 🔗 Learn More
-
-- [Nx Documentation](https://nx.dev/docs)
-- [Crafting Your Workspace Tutorial](https://nx.dev/docs/getting-started/tutorials/crafting-your-workspace)
-- [Module Boundaries](https://nx.dev/docs/features/enforce-module-boundaries)
-- [Releasing Packages](https://nx.dev/docs/features/manage-releases)
-- [Nx Plugins](https://nx.dev/docs/concepts/nx-plugins)
-- [Nx Cloud](https://nx.dev/nx-cloud)
-
-## 💬 Community
-
-Join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [X (Twitter)](https://twitter.com/nxdevtools)
-- [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [YouTube](https://www.youtube.com/@nxdevtools)
-- [Blog](https://nx.dev/blog)
+This single command will:
+1. Build `admin`, `user`, and `backend`.
+2. Provision the **DynamoDB Single-Table** (`BakeryTable`).
+3. Provision the **S3 Uploads Bucket** with CORS.
+4. Deploy the **AWS Lambda function** (`bakery-backend-api`) and **HTTP API Gateway** (`/api/*`).
+5. Provision **CloudFront + S3** for the Admin Portal and upload the compiled assets.
+6. Provision **CloudFront + S3** for the User Storefront, routing `/api/*` to API Gateway.
+7. Output live CloudFront & API Gateway URLs in your console!

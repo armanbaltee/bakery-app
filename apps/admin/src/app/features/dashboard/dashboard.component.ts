@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe, DatePipe } from '@angular/common';
 
-const API = 'http://localhost:3000/api';
+import { environment } from '../../../environments/environment';
+
+const API = environment.apiUrl;
 
 interface DashboardStats {
   totalOrders: number;

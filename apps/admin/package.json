@@ -1,0 +1,10 @@
+{
+  "name": "@org/admin",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "npx nx serve admin",
+    "start": "npx nx serve admin",
+    "build": "npx nx build admin"
+  }
+}

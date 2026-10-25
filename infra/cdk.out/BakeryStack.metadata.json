@@ -1,0 +1,1622 @@
+{
+  "/BakeryStack": [
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "BakeryTableD6334E84"
+      }
+    }
+  ],
+  "/BakeryStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+    {
+      "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+      "data": true
+    }
+  ],
+  "/BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": [
+    {
+      "type": "aws:cdk:is-custom-resource-handler-singleton",
+      "data": true
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+      "data": 2
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-singleton",
+      "data": true
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+      "data": 2
+    }
+  ],
+  "/BakeryStack/ApiGatewayUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiGatewayUrl"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:315:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/AdminCloudFrontUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AdminCloudFrontUrl"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:321:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/UserCloudFrontUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserCloudFrontUrl"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:327:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/DynamoTableName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DynamoTableName"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:333:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/UploadsBucketName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UploadsBucketName"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:339:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryTableD6334E84"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Table2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:27:25)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUploadsBucket/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUploadsBucket03A262D1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Bucket2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:49:27)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAdminBucket/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAdminBucketBC1763B4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Bucket2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:83:25)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:analytics:mixin",
+      "data": {
+        "mixin": "aws-cdk-lib.aws_s3.mixins.BucketAutoDeleteObjects"
+      }
+    }
+  ],
+  "/BakeryStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUserBucket/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUserBucket7B17576F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Bucket2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:90:24)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:analytics:mixin",
+      "data": {
+        "mixin": "aws-cdk-lib.aws_s3.mixins.BucketAutoDeleteObjects"
+      }
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApi2F71A55A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new HttpApi2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:100:21)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAuthLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAuthLambdaC0D7D5F1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCategoriesLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCategoriesLambda1BBA42AF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryProductsLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryProductsLambda6894BCF5"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCartLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCartLambdaE82F1F6A"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryOrdersLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryOrdersLambda186C01C0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryPaymentsLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryPaymentsLambda1B967A5E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryReportsLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryReportsLambdaB78CAACA"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUploadsLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUploadsLambda76C8BA6F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUsersLambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUsersLambda8CF50AB1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/AdminOAC/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AdminOACB9A16AC7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new S3OriginAccessControl2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:182:22)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAdminDistribution/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAdminDistribution9A8D8ABC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Distribution2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:186:31)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/UserOAC/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserOACDBAAAC58"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new S3OriginAccessControl2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:232:21)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUserDistribution/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUserDistributionDCEEA4DF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Distribution2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:236:30)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new BucketDeployment2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:282:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)"
+      ]
+    }
+  ],
+  "/BakeryStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...App.synth in aws-cdk-lib...",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:16:5)",
+        "...node internals..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUploadsBucket/Policy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUploadsBucketPolicy0E9B7FDE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...PropertyInjectable.addToResourcePolicy in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:72:19)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAdminBucket/Policy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAdminBucketPolicy954D5F11"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Bucket2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:83:25)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals..."
+      ]
+    },
+    {
+      "type": "aws:cdk:analytics:mixin",
+      "data": {
+        "mixin": "aws-cdk-lib.aws_s3.mixins.BucketPolicyStatements"
+      }
+    }
+  ],
+  "/BakeryStack/BakeryAdminBucket/AutoDeleteObjectsCustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAdminBucketAutoDeleteObjectsCustomResource0268F12E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUserBucket/Policy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUserBucketPolicy0872FF80"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Bucket2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:90:24)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals..."
+      ]
+    },
+    {
+      "type": "aws:cdk:analytics:mixin",
+      "data": {
+        "mixin": "aws-cdk-lib.aws_s3.mixins.BucketPolicyStatements"
+      }
+    }
+  ],
+  "/BakeryStack/BakeryUserBucket/AutoDeleteObjectsCustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUserBucketAutoDeleteObjectsCustomResource283C0FD3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/DefaultStage/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiDefaultStageA9DA831F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new HttpApi2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:100:21)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/authIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiauthproxyauthIntegrationPermission4A8FF8AE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiauthproxy89416CAC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--auth/authIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiauthauthIntegrationPermissionF93C4846"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--auth/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiauth0DD04585"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/categoriesIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationPermission227F9EAA"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicategoriesproxyD7DB8EC0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--categories/categoriesIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicategoriescategoriesIntegrationPermissionA87996DE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--categories/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicategories8908C6F4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/productsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiproductsproxyproductsIntegrationPermission1ACCB792"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiproductsproxy19BF26FE"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--products/productsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiproductsproductsIntegrationPermissionB070DBA4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--products/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiproducts8AA86B56"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/cartIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicartproxycartIntegrationPermission1DDF9ECC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicartproxyFDF01876"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--cart/cartIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicartcartIntegrationPermissionCB6C09A0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--cart/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicart96FA3891"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/ordersIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiordersproxyordersIntegrationPermission906EE3B2"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiordersproxy11F83780"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--orders/ordersIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiordersordersIntegrationPermission577752B8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--orders/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiordersD6DF7EE9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/paymentsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapipaymentsproxypaymentsIntegrationPermissionB57AE745"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapipaymentsproxy322DB6D3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--payments/paymentsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapipaymentspaymentsIntegrationPermission1668FF51"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--payments/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapipayments32B0F1B8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/reportsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapireportsproxyreportsIntegrationPermission774A3A2E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapireportsproxy11015996"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--reports/reportsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapireportsreportsIntegrationPermissionD7463D6C"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--reports/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapireports1F42CBE8"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/uploadsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationPermission30EF86AC"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiuploadsproxy87B760F9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--uploads/uploadsIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiuploadsuploadsIntegrationPermission5BC1DBF9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--uploads/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiuploadsB9FE7A9D"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/usersIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiusersproxyusersIntegrationPermission3C5382A4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiusersproxy307E2684"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--users/usersIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiusersusersIntegrationPermission047B83FB"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--users/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiusers9C94F9DD"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:172:15)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAuthLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAuthLambdaServiceRole1CFCBAF7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCategoriesLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCategoriesLambdaServiceRoleEDD2C008"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryProductsLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryProductsLambdaServiceRoleF8C2A356"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCartLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCartLambdaServiceRole039C8A14"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryOrdersLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryOrdersLambdaServiceRoleC24006C6"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryPaymentsLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryPaymentsLambdaServiceRole9099340E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryReportsLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryReportsLambdaServiceRole3619A511"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUploadsLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUploadsLambdaServiceRole53BE42B3"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUsersLambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUsersLambdaServiceRoleC3491AF9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new Function2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:142:18)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/DeployAdminSite/AwsCliLayer/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DeployAdminSiteAwsCliLayerC1B929B0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new BucketDeployment2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:282:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/DeployAdminSite/CustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DeployAdminSiteCustomResource8DC4F866"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new BucketDeployment2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:282:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/DeployUserSite/AwsCliLayer/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DeployUserSiteAwsCliLayerDAAB7AE0"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new BucketDeployment2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:297:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/DeployUserSite/CustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "DeployUserSiteCustomResourceDDAF8560"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...new BucketDeployment2 in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:297:5)",
+        "<anonymous> (E:\\Bakery App\\infra\\bin\\bakery.ts:8:1)",
+        "...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--auth--{proxy+}/authIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiauthproxyauthIntegrationD88B7170"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--categories--{proxy+}/categoriesIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicategoriesproxycategoriesIntegrationC31FC4FB"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--products--{proxy+}/productsIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiproductsproxyproductsIntegrationEB411EFB"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--cart--{proxy+}/cartIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapicartproxycartIntegration8B554BB4"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--orders--{proxy+}/ordersIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiordersproxyordersIntegrationFCF0B28F"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--payments--{proxy+}/paymentsIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapipaymentsproxypaymentsIntegration62D6038E"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--reports--{proxy+}/reportsIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapireportsproxyreportsIntegrationCEE80EE7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--uploads--{proxy+}/uploadsIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiuploadsproxyuploadsIntegrationD7534FBF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryHttpApi/ANY--api--users--{proxy+}/usersIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryHttpApiANYapiusersproxyusersIntegration740481C9"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...E:\\Bakery App\\node_modules\\aws-cdk-lib\\aws-apigatewayv2\\lib\\http\\api.js:1:96 in aws-cdk-lib...",
+        "Array.map (:)",
+        "...PropertyInjectable.<anonymous> in aws-cdk-lib...",
+        "new BakeryStack (E:\\Bakery App\\infra\\lib\\bakery-stack.ts:166:15)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryAuthLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryAuthLambdaServiceRoleDefaultPolicy0CBD6107"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCategoriesLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCategoriesLambdaServiceRoleDefaultPolicyEEDFD865"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryProductsLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryProductsLambdaServiceRoleDefaultPolicy3186B1F7"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryCartLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryCartLambdaServiceRoleDefaultPolicyCD842A56"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryOrdersLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryOrdersLambdaServiceRoleDefaultPolicy89177944"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryPaymentsLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryPaymentsLambdaServiceRoleDefaultPolicyCF63F255"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryReportsLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryReportsLambdaServiceRoleDefaultPolicy229D4D90"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUploadsLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUploadsLambdaServiceRoleDefaultPolicy12203034"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/BakeryUsersLambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BakeryUsersLambdaServiceRoleDefaultPolicyCDC73BA1"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/BakeryStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ]
+}

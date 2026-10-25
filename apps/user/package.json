@@ -1,0 +1,10 @@
+{
+  "name": "@org/user",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "npx nx serve user",
+    "start": "npx nx serve user",
+    "build": "npx nx build user"
+  }
+}
